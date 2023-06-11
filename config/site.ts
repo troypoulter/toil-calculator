@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "TOIL Calculator",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "A secure and user-friendly website that helps you calculate your TOIL based on user-defined rulesets, shareable with anyone.",
   mainNav: [
     {
       title: "Home",
@@ -11,8 +11,7 @@ export const siteConfig = {
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    troy_website: "https://www.troypoulter.com/",
+    github: "https://github.com/troypoulter/toil-calculator",
   },
 }
