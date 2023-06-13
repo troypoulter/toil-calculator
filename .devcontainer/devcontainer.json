@@ -3,5 +3,12 @@
   "features": {},
   "containerEnv": {
     "WATCHPACK_POLLING": "true"
-  }
+},
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"bradlc.vscode-tailwindcss"
+		]
+	}
+}
 }
