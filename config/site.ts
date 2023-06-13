@@ -11,7 +11,8 @@ export const siteConfig = {
     },
   ],
   links: {
-    troy_website: "https://www.troypoulter.com/",
+    troy_website: "https://www.troypoulter.com",
+    lys_website: "https://github.com/lysng",
     github: "https://github.com/troypoulter/toil-calculator",
   },
 }

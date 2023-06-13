@@ -19,12 +19,12 @@ export function SiteFooter() {
             </a>
             ,{" "}
             <a
-              href={siteConfig.links.troy_website}
+              href={siteConfig.links.lys_website}
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              troypoulter
+              lysng
             </a>{" "}
             and{" "}
             <a
