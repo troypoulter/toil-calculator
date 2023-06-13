@@ -1,7 +1,10 @@
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function IndexPage() {
   return (
@@ -12,9 +15,47 @@ export default function IndexPage() {
         </h1>
         <p className="text-lg text-muted-foreground sm:text-xl">
           Define rulesets for how your TOIL is calculated, calculate your TOIL
-          and share it with anyone all through the URL.
+          and share it with anyone all through the URL
         </p>
       </div>
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle>1. Add your rulesets</CardTitle>
+          <CardDescription>
+            Create rulesets which define what multiplier you get based on the
+            day and time
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Add rulesets here</p>
+        </CardContent>
+      </Card>
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle>2. Enter your hours</CardTitle>
+          <CardDescription>
+            Add in your hours worked for a given week
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Add time here</p>
+        </CardContent>
+      </Card>
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle>3. Summary</CardTitle>
+          <CardDescription>
+            Review the total hours applicable after combining your rulesets and
+            hours worked
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-lg font-semibold">Your total TOIL: 10 hours</div>
+          <p className="leading-7 [&:not(:first-child)]:mt-6">
+            Here&apos;s the math:
+          </p>
+        </CardContent>
+      </Card>
     </section>
   )
 }
