@@ -6,6 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import Rulesets from "./components/rulesets"
+
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 py-6 md:pt-10">
@@ -27,7 +29,7 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Add rulesets here</p>
+          <Rulesets />
         </CardContent>
       </Card>
       <Card className="shadow-md">
