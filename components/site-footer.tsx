@@ -28,12 +28,12 @@ export function SiteFooter() {
             </a>{" "}
             and{" "}
             <a
-              href={siteConfig.links.troy_website}
+              href={siteConfig.links.madry_website}
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              troypoulter
+              madrym
             </a>
             . The source code is available on{" "}
             <a

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card"
 
 import Rulesets from "./components/rulesets"
+import EnterHours from "./components/enter-hours"
 
 export default function IndexPage() {
   return (
@@ -40,7 +41,7 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Add time here</p>
+          <EnterHours />
         </CardContent>
       </Card>
       <Card className="shadow-md">
