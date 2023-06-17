@@ -152,7 +152,7 @@ export default function Rulesets() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grid grid-flow-row auto-rows-max gap-4"
+              className="grid gap-4 sm:grid-cols-2 md:grid-cols-5"
             >
               <FormField
                 control={form.control}
