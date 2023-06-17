@@ -87,6 +87,7 @@ export type Ruleset = z.infer<typeof rulesetSchema>
 
 export default function Rulesets() {
   const [rulesets, setRulesets] = useState<Ruleset[]>([])
+  const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
   // https://github.com/shadcn/ui/issues/549
   const form = useForm<z.infer<typeof rulesetSchema>>({
@@ -105,6 +106,67 @@ export default function Rulesets() {
     setRulesets((rulesets) => [...rulesets, newRuleset])
   }
 
+  function addSampleRuleset() {
+    setIsSampleDataAdded(true)
+    setRulesets((rulesets) => [
+      ...rulesets,
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Monday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Tuesday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Wednesday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Thursday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Friday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Weekend Hours",
+        dayOfWeek: "Saturday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 2.0,
+      },
+      {
+        name: "Weekend Hours",
+        dayOfWeek: "Sunday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 2.0,
+      },
+    ])
+  }
+
+  function resetRulesets() {
+    setIsSampleDataAdded(false)
+    setRulesets([])
+  }
+
   useEffect(() => {
     if (form.formState.isSubmitSuccessful) {
       console.log("hello!")
@@ -115,7 +177,7 @@ export default function Rulesets() {
   // TODO: Make the form items appear side-by-side.
   return (
     <>
-      <Table className="mb-8">
+      <Table className="mb-4">
         <TableHeader>
           <TableRow>
             <TableHead>Ruleset Name</TableHead>
@@ -127,7 +189,9 @@ export default function Rulesets() {
         </TableHeader>
         <TableBody>
           {rulesets.map((ruleset) => (
-            <TableRow>
+            <TableRow
+              key={`${ruleset.name}-${ruleset.dayOfWeek}-${ruleset.multipler}`}
+            >
               <TableCell>{ruleset.name}</TableCell>
               <TableCell>{ruleset.dayOfWeek}</TableCell>
               <TableCell>{ruleset.startTime}</TableCell>
@@ -144,6 +208,21 @@ export default function Rulesets() {
           )}
         </TableBody>
       </Table>
+      <Button
+        onClick={addSampleRuleset}
+        variant="secondary"
+        className="col-span-full mt-2 w-full"
+        disabled={isSampleDataAdded}
+      >
+        Add Sample Data
+      </Button>
+      <Button
+        onClick={resetRulesets}
+        variant="outline"
+        className="col-span-full mb-8 mt-2 w-full"
+      >
+        Remove Rulesets
+      </Button>
       <Card>
         <CardHeader>
           <CardTitle>Add a new ruleset</CardTitle>
