@@ -25,6 +25,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 // Import this dynamically to avoid hydration issues.
 // https://github.com/react-hook-form/devtools/issues/187
@@ -106,8 +115,35 @@ export default function Rulesets() {
   // TODO: Make the form items appear side-by-side.
   return (
     <>
-      <pre>{JSON.stringify(rulesets, null, 2)}</pre>
-      <DevT control={form.control} />
+      <Table className="mb-8">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Ruleset Name</TableHead>
+            <TableHead>Applicable Days</TableHead>
+            <TableHead>Start Time</TableHead>
+            <TableHead>End Time</TableHead>
+            <TableHead>Multipler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rulesets.map((ruleset) => (
+            <TableRow>
+              <TableCell>{ruleset.name}</TableCell>
+              <TableCell>{ruleset.dayOfWeek}</TableCell>
+              <TableCell>{ruleset.startTime}</TableCell>
+              <TableCell>{ruleset.endTime}</TableCell>
+              <TableCell>{ruleset.multipler}</TableCell>
+            </TableRow>
+          ))}
+          {rulesets.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center">
+                No rulesets added yet, you can add them below.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
       <Card>
         <CardHeader>
           <CardTitle>Add a new ruleset</CardTitle>
@@ -343,6 +379,7 @@ export default function Rulesets() {
                 Add Ruleset
               </Button>
             </form>
+            <DevT control={form.control} />
           </Form>
         </CardContent>
       </Card>
