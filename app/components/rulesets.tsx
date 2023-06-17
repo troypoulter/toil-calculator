@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { DevTool } from "@hookform/devtools"
+import dynamic from "next/dynamic"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { useForm } from "react-hook-form"
@@ -25,6 +25,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
+// Import this dynamically to avoid hydration issues.
+// https://github.com/react-hook-form/devtools/issues/187
+const DevT: React.ElementType = dynamic(
+  () => import("@hookform/devtools").then((module) => module.DevTool),
+  { ssr: false }
+)
 
 const rulesetSchema = z.object({
   name: z
@@ -100,7 +107,7 @@ export default function Rulesets() {
   return (
     <>
       <pre>{JSON.stringify(rulesets, null, 2)}</pre>
-      <DevTool control={form.control} />
+      <DevT control={form.control} />
       <Card>
         <CardHeader>
           <CardTitle>Add a new ruleset</CardTitle>
