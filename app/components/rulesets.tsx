@@ -1,23 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { DevTool } from "@hookform/devtools"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,9 +35,11 @@ const rulesetSchema = z.object({
   // TODO: Add validation for days of the week to be just Monday-Sunday.
   // TODO: Support multi-select. Not supported yet by shadcn, checkout https://github.com/shadcn/ui/issues/66.
   // IDEA: Make it a checkbox?
-  dayOfWeek: z.string({
-    required_error: "Day of the week is required.",
-  }),
+  dayOfWeek: z
+    .string({
+      required_error: "Day of the week is required.",
+    })
+    .min(1, { message: "Day of the week is required." }),
   startTime: z
     .string({
       required_error: "Start time is required.",
@@ -76,8 +72,16 @@ export type Ruleset = z.infer<typeof rulesetSchema>
 export default function Rulesets() {
   const [rulesets, setRulesets] = useState<Ruleset[]>([])
 
+  // https://github.com/shadcn/ui/issues/549
   const form = useForm<z.infer<typeof rulesetSchema>>({
     resolver: zodResolver(rulesetSchema),
+    defaultValues: {
+      name: "",
+      dayOfWeek: "",
+      startTime: "",
+      endTime: "",
+      multipler: 0,
+    },
   })
 
   function onSubmit(newRuleset: Ruleset) {
@@ -96,6 +100,7 @@ export default function Rulesets() {
   return (
     <>
       <pre>{JSON.stringify(rulesets, null, 2)}</pre>
+      <DevTool control={form.control} />
       <Card>
         <CardHeader>
           <CardTitle>Add a new ruleset</CardTitle>
