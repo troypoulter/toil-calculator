@@ -138,6 +138,7 @@ export default function Rulesets() {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        {...field}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -172,6 +173,7 @@ export default function Rulesets() {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        {...field}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -249,6 +251,7 @@ export default function Rulesets() {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        {...field}
                       >
                         <FormControl>
                           <SelectTrigger>
