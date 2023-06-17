@@ -25,6 +25,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 // Import this dynamically to avoid hydration issues.
 // https://github.com/react-hook-form/devtools/issues/187
@@ -78,6 +87,7 @@ export type Ruleset = z.infer<typeof rulesetSchema>
 
 export default function Rulesets() {
   const [rulesets, setRulesets] = useState<Ruleset[]>([])
+  const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
   // https://github.com/shadcn/ui/issues/549
   const form = useForm<z.infer<typeof rulesetSchema>>({
@@ -96,6 +106,67 @@ export default function Rulesets() {
     setRulesets((rulesets) => [...rulesets, newRuleset])
   }
 
+  function addSampleRuleset() {
+    setIsSampleDataAdded(true)
+    setRulesets((rulesets) => [
+      ...rulesets,
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Monday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Tuesday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Wednesday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Thursday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Normal Hours",
+        dayOfWeek: "Friday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 1.0,
+      },
+      {
+        name: "Weekend Hours",
+        dayOfWeek: "Saturday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 2.0,
+      },
+      {
+        name: "Weekend Hours",
+        dayOfWeek: "Sunday",
+        startTime: "9:00 AM",
+        endTime: "5:00 PM",
+        multipler: 2.0,
+      },
+    ])
+  }
+
+  function resetRulesets() {
+    setIsSampleDataAdded(false)
+    setRulesets([])
+  }
+
   useEffect(() => {
     if (form.formState.isSubmitSuccessful) {
       console.log("hello!")
@@ -106,8 +177,52 @@ export default function Rulesets() {
   // TODO: Make the form items appear side-by-side.
   return (
     <>
-      <pre>{JSON.stringify(rulesets, null, 2)}</pre>
-      <DevT control={form.control} />
+      <Table className="mb-4">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Ruleset Name</TableHead>
+            <TableHead>Applicable Days</TableHead>
+            <TableHead>Start Time</TableHead>
+            <TableHead>End Time</TableHead>
+            <TableHead>Multipler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rulesets.map((ruleset) => (
+            <TableRow
+              key={`${ruleset.name}-${ruleset.dayOfWeek}-${ruleset.multipler}`}
+            >
+              <TableCell>{ruleset.name}</TableCell>
+              <TableCell>{ruleset.dayOfWeek}</TableCell>
+              <TableCell>{ruleset.startTime}</TableCell>
+              <TableCell>{ruleset.endTime}</TableCell>
+              <TableCell>{ruleset.multipler}</TableCell>
+            </TableRow>
+          ))}
+          {rulesets.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center">
+                No rulesets added yet, you can add them below.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <Button
+        onClick={addSampleRuleset}
+        variant="secondary"
+        className="col-span-full mt-2 w-full"
+        disabled={isSampleDataAdded}
+      >
+        Add Sample Data
+      </Button>
+      <Button
+        onClick={resetRulesets}
+        variant="outline"
+        className="col-span-full mb-8 mt-2 w-full"
+      >
+        Remove Rulesets
+      </Button>
       <Card>
         <CardHeader>
           <CardTitle>Add a new ruleset</CardTitle>
@@ -116,7 +231,7 @@ export default function Rulesets() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grid grid-flow-row auto-rows-max gap-4"
+              className="grid gap-4 sm:grid-cols-2 md:grid-cols-5"
             >
               <FormField
                 control={form.control}
@@ -343,6 +458,7 @@ export default function Rulesets() {
                 Add Ruleset
               </Button>
             </form>
+            <DevT control={form.control} />
           </Form>
         </CardContent>
       </Card>
