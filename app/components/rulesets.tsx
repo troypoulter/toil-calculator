@@ -89,7 +89,7 @@ export default function Rulesets() {
         <TableHeader>
           <TableRow>
             <TableHead>Ruleset Name</TableHead>
-            <TableHead>Applicable Days</TableHead>
+            <TableHead>Applicable Day</TableHead>
             <TableHead>Start Time</TableHead>
             <TableHead>End Time</TableHead>
             <TableHead>Multipler</TableHead>
@@ -163,7 +163,7 @@ export default function Rulesets() {
                 name="dayOfWeek"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Applicable Days</FormLabel>
+                    <FormLabel>Applicable Day</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
