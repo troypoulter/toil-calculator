@@ -39,6 +39,7 @@ import {
   SAMPLE_RULESETS,
   TIME_OF_DAY_INCREMENTS,
 } from "../utils/constants"
+import { validateNewRuleset } from "../utils/utils"
 
 // Import this dynamically to avoid hydration issues.
 // https://github.com/react-hook-form/devtools/issues/187
@@ -49,6 +50,7 @@ const DevT: React.ElementType = dynamic(
 
 export default function Rulesets() {
   const [rulesets, setRulesets] = useState<Ruleset[]>([])
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
   const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
   // https://github.com/shadcn/ui/issues/549
@@ -65,6 +67,16 @@ export default function Rulesets() {
   })
 
   function onSubmit(newRuleset: Ruleset) {
+    const { isValid, errorMessage } = validateNewRuleset(newRuleset, rulesets)
+
+    if (!isValid) {
+      setSubmissionError(
+        errorMessage ?? "An unknown error occurred while adding the ruleset."
+      )
+      return
+    }
+
+    setSubmissionError(null)
     setRulesets((rulesets) => [...rulesets, newRuleset])
   }
 
@@ -79,10 +91,10 @@ export default function Rulesets() {
   }
 
   useEffect(() => {
-    if (form.formState.isSubmitSuccessful) {
+    if (form.formState.isSubmitSuccessful && submissionError === null) {
       form.reset()
     }
-  }, [form, form.formState])
+  }, [form, form.formState, submissionError])
 
   return (
     <>
@@ -280,6 +292,11 @@ export default function Rulesets() {
                   </FormItem>
                 )}
               />
+              {submissionError && (
+                <p className="col-span-full text-sm font-medium text-destructive">
+                  {submissionError}
+                </p>
+              )}
               <Button type="submit" className="col-span-full mt-4">
                 Add Ruleset
               </Button>
