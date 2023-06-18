@@ -59,7 +59,7 @@ export default function Rulesets() {
       dayOfWeek: "",
       startTime: "",
       endTime: "",
-      multipler: 0,
+      multipler: 1,
     },
   })
 
@@ -268,7 +268,7 @@ export default function Rulesets() {
                   <FormItem>
                     <FormLabel>Multiplier</FormLabel>
                     <FormControl>
-                      <Input placeholder="1.0" {...field} className="grid" />
+                      <Input placeholder="1" {...field} className="grid" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
