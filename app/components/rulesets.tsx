@@ -42,7 +42,40 @@ const DevT: React.ElementType = dynamic(
   { ssr: false }
 )
 
-const rulesetSchema = z.object({
+const rulesetDateSchema = z
+  .object({
+    startTime: z
+      .string({
+        required_error: "Start time is required.",
+      })
+      .regex(
+        /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
+        "Start time must be in the format of HH:MM AM/PM"
+      ),
+    endTime: z
+      .string({
+        required_error: "End time is required.",
+      })
+      .regex(
+        /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
+        "End time must be in the format of HH:MM AM/PM"
+      ),
+  })
+  .refine(
+    (data) => {
+      // Convert startTime and endTime to date and check if startTime is before endTime.
+      const startTimeDate = new Date(`2000/01/01 ${data.startTime}`)
+      const endTimeDate = new Date(`2000/01/01 ${data.endTime}`)
+
+      return endTimeDate > startTimeDate
+    },
+    {
+      message: "End time must be after start time.",
+      path: ["endTime"],
+    }
+  )
+
+const baseRulesetSchema = z.object({
   name: z
     .string({
       required_error: "Ruleset name is required.",
@@ -56,22 +89,6 @@ const rulesetSchema = z.object({
       required_error: "Day of the week is required.",
     })
     .min(1, { message: "Day of the week is required." }),
-  startTime: z
-    .string({
-      required_error: "Start time is required.",
-    })
-    .regex(
-      /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
-      "Start time must be in the format of HH:MM AM/PM"
-    ),
-  endTime: z
-    .string({
-      required_error: "End time is required.",
-    })
-    .regex(
-      /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
-      "End time must be in the format of HH:MM AM/PM"
-    ),
   // TODO: Add better support for converting string to number.
   multipler: z
     .string()
@@ -83,6 +100,8 @@ const rulesetSchema = z.object({
     ),
 })
 
+const rulesetSchema = baseRulesetSchema.and(rulesetDateSchema)
+
 export type Ruleset = z.infer<typeof rulesetSchema>
 
 export default function Rulesets() {
@@ -90,7 +109,7 @@ export default function Rulesets() {
   const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
   // https://github.com/shadcn/ui/issues/549
-  const form = useForm<z.infer<typeof rulesetSchema>>({
+  const form = useForm<Ruleset>({
     resolver: zodResolver(rulesetSchema),
     defaultValues: {
       name: "",
