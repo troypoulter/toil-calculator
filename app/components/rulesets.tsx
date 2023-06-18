@@ -174,7 +174,7 @@ export default function Rulesets() {
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue
-                              placeholder="Select a day of the week"
+                              placeholder="Select applicable day"
                               className="grid"
                             />
                           </SelectTrigger>
