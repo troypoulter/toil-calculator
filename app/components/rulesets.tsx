@@ -52,6 +52,7 @@ export default function Rulesets() {
   const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
   // https://github.com/shadcn/ui/issues/549
+  // We are using the release candidate of Radix which let's us pass "" to reset the placeholder text.
   const form = useForm<Ruleset>({
     resolver: zodResolver(RulesetSchema),
     defaultValues: {
@@ -268,7 +269,12 @@ export default function Rulesets() {
                   <FormItem>
                     <FormLabel>Multiplier</FormLabel>
                     <FormControl>
-                      <Input placeholder="1" {...field} className="grid" />
+                      <Input
+                        type="number"
+                        placeholder="1"
+                        {...field}
+                        className="grid"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
