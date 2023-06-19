@@ -13,6 +13,7 @@ export const siteConfig = {
   links: {
     troy_website: "https://www.troypoulter.com",
     lys_website: "https://github.com/lysng",
+    madry_website: "https://github.com/madrym",
     github: "https://github.com/troypoulter/toil-calculator",
   },
 }
