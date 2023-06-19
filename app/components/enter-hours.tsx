@@ -30,7 +30,7 @@ import { useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarDays } from 'lucide-react';
 
 
 const enterHoursSchema = z.object({
@@ -110,7 +110,7 @@ export default function EnterHours() {
                                                         ) : (
                                                             <span>Pick a date</span>
                                                         )}
-                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
