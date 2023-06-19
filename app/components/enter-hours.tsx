@@ -1,6 +1,11 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -22,13 +27,17 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useState } from "react"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+
 
 const enterHoursSchema = z.object({
-    dayOfWeek: z
-        .string({
-            required_error: "Day of the week is required.",
-        })
-        .min(1, { message: "Day of the week is required." }),
+    date: z
+        .date({
+            required_error: "A date is required.",
+        }),
     startTime: z
         .string({
             required_error: "We need to know when you started work to calculate your TOIL",
@@ -56,7 +65,7 @@ export default function EnterHours() {
     const form = useForm<z.infer<typeof enterHoursSchema>>({
         resolver: zodResolver(enterHoursSchema),
         defaultValues: {
-            dayOfWeek: "",
+            date: undefined,
             startTime: "",
             endTime: "",
         },
@@ -78,39 +87,45 @@ export default function EnterHours() {
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className="grid grid-flow-row auto-rows-max gap-4"
+                            className="grid gap-4 sm:grid-cols-3 md:grid-cols-3"
                         >
                             <FormField
                                 control={form.control}
-                                name="dayOfWeek"
+                                name="date"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Work Day</FormLabel>
-                                        <FormControl>
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                defaultValue={field.value}
-                                                {...field}
-                                            >
+                                    <FormItem className="flex flex-col space-y-4">
+                                        <FormLabel>Date worked</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
                                                 <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue
-                                                            placeholder="Select a day of the week that you worked"
-                                                            className="grid"
-                                                        />
-                                                    </SelectTrigger>
+                                                    <Button
+                                                        variant={"outline"}
+                                                        className={cn(
+                                                            "pl-3 text-left font-normal",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value ? (
+                                                            format(field.value, "PPP")
+                                                        ) : (
+                                                            <span>Pick a date</span>
+                                                        )}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
                                                 </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="Monday">Monday</SelectItem>
-                                                    <SelectItem value="Tuesday">Tuesday</SelectItem>
-                                                    <SelectItem value="Wednesday">Wednesday</SelectItem>
-                                                    <SelectItem value="Thursday">Thursday</SelectItem>
-                                                    <SelectItem value="Friday">Friday</SelectItem>
-                                                    <SelectItem value="Saturday">Saturday</SelectItem>
-                                                    <SelectItem value="Sunday">Sunday</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+                                                    disabled={(date) =>
+                                                        date > new Date() || date < new Date("1900-01-01")
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
                                         <FormMessage />
                                     </FormItem>
                                 )}
