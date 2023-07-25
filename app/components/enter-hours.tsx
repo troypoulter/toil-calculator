@@ -32,7 +32,6 @@ import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarDays } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import rulesets from "./rulesets"
 
 
 const enterHoursSchema = z.object({
@@ -121,7 +120,7 @@ export default function EnterHours() {
                 variant="outline"
                 className="col-span-full mb-8 mt-2 w-full"
             >
-                Remove Rulesets
+                Remove Your TOIL Hours
             </Button>
 
             <Card>
