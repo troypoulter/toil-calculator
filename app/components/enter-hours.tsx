@@ -31,6 +31,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarDays } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 
 const enterHoursSchema = z.object({
@@ -62,6 +63,10 @@ export default function EnterHours() {
 
     const [hoursWorked, setHoursWorked] = useState<EnterHours[]>([])
 
+    function removeHoursWorked() {
+        setHoursWorked([])
+    }
+
     const form = useForm<z.infer<typeof enterHoursSchema>>({
         resolver: zodResolver(enterHoursSchema),
         defaultValues: {
@@ -78,7 +83,46 @@ export default function EnterHours() {
 
     return (
         <>
-            <pre>{JSON.stringify(hoursWorked, null, 2)}</pre>
+            <Table className="mb-4">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Date Worked</TableHead>
+                        <TableHead>Start Time</TableHead>
+                        <TableHead>End Time</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {hoursWorked.map((hoursWorked) => (
+                        <TableRow
+                            key={`${hoursWorked.date}-${hoursWorked.startTime}`}
+                        >
+                            <TableCell>{hoursWorked.date.toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}</TableCell>
+                            <TableCell>{hoursWorked.startTime}</TableCell>
+                            <TableCell>{hoursWorked.endTime}</TableCell>
+                        </TableRow>
+                    ))}
+                    {hoursWorked.length === 0 && (
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center">
+                                Enter your TOIL hours
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <Button
+                onClick={removeHoursWorked}
+                variant="outline"
+                className="col-span-full mb-8 mt-2 w-full"
+            >
+                Remove Your TOIL Hours
+            </Button>
+
             <Card>
                 <CardHeader>
                     <CardTitle>Enter the time you worked per day</CardTitle>

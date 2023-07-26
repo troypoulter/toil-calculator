@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Card,
   CardContent,
@@ -8,6 +10,7 @@ import {
 
 import Rulesets from "./components/rulesets"
 import EnterHours from "./components/enter-hours"
+import TypeIt from "typeit-react"
 
 export default function IndexPage() {
   return (
@@ -16,10 +19,15 @@ export default function IndexPage() {
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
           A simple TOIL calculator
         </h1>
-        <p className="text-lg text-muted-foreground sm:text-xl">
-          Define rulesets for how your TOIL is calculated, calculate your TOIL
-          and share it with anyone all through the URL
-        </p>
+        <p className="text-lg text-muted-foreground sm:text-xl"><TypeIt options={{
+          speed: 40,
+          lifeLike: true,
+          waitUntilVisible: true,
+        }}>
+          Define rulesets for how your TOIL is calculated, calculate your TOIL and share it with anyone all through the URL
+        </TypeIt></p>
+
+
       </div>
       <Card className="shadow-md">
         <CardHeader>
@@ -59,6 +67,6 @@ export default function IndexPage() {
           </p>
         </CardContent>
       </Card>
-    </section>
+    </section >
   )
 }
