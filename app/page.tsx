@@ -20,7 +20,7 @@ export default function IndexPage() {
           A simple TOIL calculator
         </h1>
         <p className="text-lg text-muted-foreground sm:text-xl"><TypeIt options={{
-          speed: 60,
+          speed: 40,
           lifeLike: true,
           waitUntilVisible: true,
         }}>
