@@ -1,3 +1,4 @@
+import { EnterHours } from "../components/enter-hours";
 import { Ruleset } from "../interfaces/Ruleset";
 
 export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { isValid: boolean, errorMessage?: string } {
@@ -33,6 +34,47 @@ export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { 
   }
 
   return { isValid: true };
+}
+export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHours[]): { isValid: boolean, errorMessage?: string } {
+
+  if (newHoursWorked.startTime == newHoursWorked.endTime) {
+    return { isValid: false, errorMessage: 'Start time and end time cannot be the same.' };
+  }
+
+  if (newHoursWorked.startTime > newHoursWorked.endTime) {
+    return { isValid: false, errorMessage: 'End time cannot be before start time.' };
+  }
+
+  // Validate overlapping time period
+  const overlappingHours = hoursWorked.some((existingHours) => {
+    const newHoursStart = newHoursWorked.startTime;
+    const newHoursEnd = newHoursWorked.endTime;
+    const existingHoursStart = existingHours.startTime;
+    const existingHoursEnd = existingHours.endTime;
+
+    return (
+      newHoursWorked.date === existingHours.date &&
+      newHoursStart < existingHoursEnd &&
+      newHoursEnd > existingHoursEnd
+    );
+  });
+
+  const exactMatch = hoursWorked.some((existingHours) => {
+    return (
+      newHoursWorked.date === existingHours.date &&
+      newHoursWorked.startTime === existingHours.startTime &&
+      newHoursWorked.endTime === existingHours.endTime
+    );
+  })
+
+  if (exactMatch) {
+    return { isValid: false, errorMessage: 'The inputted hours exactly matches an hours you have already added.' };
+  }
+
+  return { isValid: true };
+
+  // TODO: Should we begin to handle time zones?
+
 }
 
 export function calculateHours(startTime: string, endTime: string): number {
