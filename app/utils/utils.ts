@@ -59,6 +59,10 @@ export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHour
     );
   });
 
+  if (overlappingHours) {
+    return { isValid: false, errorMessage: 'The new TOIL that you entered overlaps with hours that you have already added.' };
+  }
+
   const exactMatch = hoursWorked.some((existingHours) => {
     return (
       newHoursWorked.date === existingHours.date &&
