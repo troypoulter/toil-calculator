@@ -45,7 +45,6 @@ export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHour
     return { isValid: false, errorMessage: 'End time cannot be before start time.' };
   }
 
-  // Validate overlapping time period
   const overlappingHours = hoursWorked.some((existingHours) => {
     const newHoursStart = newHoursWorked.startTime;
     const newHoursEnd = newHoursWorked.endTime;
