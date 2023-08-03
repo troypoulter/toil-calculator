@@ -1,17 +1,11 @@
+import { EnterHours } from "../components/enter-hours";
 import { Ruleset } from "../interfaces/Ruleset";
 
 export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { isValid: boolean, errorMessage?: string } {
-  // Validate overlapping time period
   const overlaps = rulesets.some((existingRuleset) => {
-    const newStart = new Date(`2000/01/01 ${newRuleset.startTime}`);
-    const newEnd = new Date(`2000/01/01 ${newRuleset.endTime}`);
-    const existingStart = new Date(`2000/01/01 ${existingRuleset.startTime}`);
-    const existingEnd = new Date(`2000/01/01 ${existingRuleset.endTime}`);
-
     return (
       newRuleset.dayOfWeek === existingRuleset.dayOfWeek &&
-      newStart < existingEnd &&
-      newEnd > existingStart
+      hasTimeOverlap(newRuleset.startTime, newRuleset.endTime, existingRuleset.startTime, existingRuleset.endTime)
     );
   });
 
@@ -19,12 +13,10 @@ export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { 
     return { isValid: false, errorMessage: 'The new ruleset overlaps with an existing ruleset.' };
   }
 
-  // Validate exact match
   const exactMatch = rulesets.some((existingRuleset) => {
     return (
       newRuleset.dayOfWeek === existingRuleset.dayOfWeek &&
-      newRuleset.startTime === existingRuleset.startTime &&
-      newRuleset.endTime === existingRuleset.endTime
+      hasExactMatch(newRuleset.startTime, newRuleset.endTime, existingRuleset.startTime, existingRuleset.endTime)
     );
   });
 
@@ -35,6 +27,42 @@ export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { 
   return { isValid: true };
 }
 
+export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHours[]): { isValid: boolean, errorMessage?: string } {
+
+  if (newHoursWorked.startTime == newHoursWorked.endTime) {
+    return { isValid: false, errorMessage: 'Start time and end time cannot be the same.' };
+  }
+
+  if (newHoursWorked.startTime > newHoursWorked.endTime) {
+    return { isValid: false, errorMessage: 'End time cannot be before start time.' };
+  }
+
+  const overlappingHours = hoursWorked.some((existingHours) => {
+    return (
+      newHoursWorked.date === existingHours.date &&
+      hasTimeOverlap(newHoursWorked.startTime, newHoursWorked.endTime, existingHours.startTime, existingHours.endTime)
+    );
+  });
+
+  if (overlappingHours) {
+    return { isValid: false, errorMessage: 'The new TOIL that you entered overlaps with hours that you have already added.' };
+  }
+
+  const exactMatch = hoursWorked.some((existingHours) => {
+    return (
+      newHoursWorked.date === existingHours.date &&
+      hasExactMatch(newHoursWorked.startTime, newHoursWorked.endTime, existingHours.startTime, existingHours.endTime)
+    );
+  });
+
+  if (exactMatch) {
+    return { isValid: false, errorMessage: 'The inputted hours exactly match hours you have already added.' };
+  }
+
+  return { isValid: true };
+
+}
+
 export function calculateHours(startTime: string, endTime: string): number {
   const startDate = new Date(`2000-01-01 ${startTime}`);
   const endDate = new Date(`2000-01-01 ${endTime}`);
@@ -43,4 +71,19 @@ export function calculateHours(startTime: string, endTime: string): number {
   const hoursWorked = timeDifference / (1000 * 60 * 60)
 
   return hoursWorked;
+}
+
+// Helper function to check if two time periods are exactly the same
+export function hasExactMatch(newStart: string, newEnd: string, existingStart: string, existingEnd: string): boolean {
+  return newStart === existingStart && newEnd === existingEnd;
+}
+
+// Helper function to check if there is an overlap between two time periods
+export function hasTimeOverlap(newStart: string, newEnd: string, existingStart: string, existingEnd: string): boolean {
+  const newStartObj = new Date(`2000/01/01 ${newStart}`);
+  const newEndObj = new Date(`2000/01/01 ${newEnd}`);
+  const existingStartObj = new Date(`2000/01/01 ${existingStart}`);
+  const existingEndObj = new Date(`2000/01/01 ${existingEnd}`);
+
+  return newStartObj < existingEndObj && newEndObj > existingStartObj;
 }

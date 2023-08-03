@@ -26,12 +26,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarDays } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { validateHours } from "../utils/utils"
+import { TIME_OF_DAY_INCREMENTS } from "../utils/constants"
 
 
 const enterHoursSchema = z.object({
@@ -62,6 +64,7 @@ export type EnterHours = z.infer<typeof enterHoursSchema>
 export default function EnterHours() {
 
     const [hoursWorked, setHoursWorked] = useState<EnterHours[]>([])
+    const [submissionError, setSubmissionError] = useState<string | null>(null)
 
     function removeHoursWorked() {
         setHoursWorked([])
@@ -77,9 +80,24 @@ export default function EnterHours() {
     })
 
     function onSubmit(newHoursWorked: EnterHours) {
-        console.log(newHoursWorked)
+        const { isValid, errorMessage } = validateHours(newHoursWorked, hoursWorked)
+
+        if (!isValid) {
+            setSubmissionError(
+                errorMessage ?? "An unknown error occurred validating your hours."
+            )
+            return
+        }
+
+        setSubmissionError(null)
         setHoursWorked((hoursWorked) => [...hoursWorked, newHoursWorked])
     }
+
+    useEffect(() => {
+        if (form.formState.isSubmitSuccessful && submissionError === null) {
+            form.reset()
+        }
+    }, [form, form.formState, submissionError])
 
     return (
         <>
@@ -196,54 +214,11 @@ export default function EnterHours() {
                                                 </FormControl>
                                                 <SelectContent>
                                                     <ScrollArea className="h-[300px]">
-                                                        <SelectItem value="12:00 AM">12:00 AM</SelectItem>
-                                                        <SelectItem value="12:30 AM">12:30 AM</SelectItem>
-                                                        <SelectItem value="1:00 AM">1:00 AM</SelectItem>
-                                                        <SelectItem value="1:30 AM">1:30 AM</SelectItem>
-                                                        <SelectItem value="2:00 AM">2:00 AM</SelectItem>
-                                                        <SelectItem value="2:30 AM">2:30 AM</SelectItem>
-                                                        <SelectItem value="3:00 AM">3:00 AM</SelectItem>
-                                                        <SelectItem value="3:30 AM">3:30 AM</SelectItem>
-                                                        <SelectItem value="4:00 AM">4:00 AM</SelectItem>
-                                                        <SelectItem value="4:30 AM">4:30 AM</SelectItem>
-                                                        <SelectItem value="5:00 AM">5:00 AM</SelectItem>
-                                                        <SelectItem value="5:30 AM">5:30 AM</SelectItem>
-                                                        <SelectItem value="6:00 AM">6:00 AM</SelectItem>
-                                                        <SelectItem value="6:30 AM">6:30 AM</SelectItem>
-                                                        <SelectItem value="7:00 AM">7:00 AM</SelectItem>
-                                                        <SelectItem value="7:30 AM">7:30 AM</SelectItem>
-                                                        <SelectItem value="8:00 AM">8:00 AM</SelectItem>
-                                                        <SelectItem value="8:30 AM">8:30 AM</SelectItem>
-                                                        <SelectItem value="9:00 AM">9:00 AM</SelectItem>
-                                                        <SelectItem value="9:30 AM">9:30 AM</SelectItem>
-                                                        <SelectItem value="10:00 AM">10:00 AM</SelectItem>
-                                                        <SelectItem value="10:30 AM">10:30 AM</SelectItem>
-                                                        <SelectItem value="11:00 AM">11:00 AM</SelectItem>
-                                                        <SelectItem value="11:30 AM">11:30 AM</SelectItem>
-                                                        <SelectItem value="12:00 PM">12:00 PM</SelectItem>
-                                                        <SelectItem value="12:30 PM">12:30 PM</SelectItem>
-                                                        <SelectItem value="1:00 PM">1:00 PM</SelectItem>
-                                                        <SelectItem value="1:30 PM">1:30 PM</SelectItem>
-                                                        <SelectItem value="2:00 PM">2:00 PM</SelectItem>
-                                                        <SelectItem value="2:30 PM">2:30 PM</SelectItem>
-                                                        <SelectItem value="3:00 PM">3:00 PM</SelectItem>
-                                                        <SelectItem value="3:30 PM">3:30 PM</SelectItem>
-                                                        <SelectItem value="4:00 PM">4:00 PM</SelectItem>
-                                                        <SelectItem value="4:30 PM">4:30 PM</SelectItem>
-                                                        <SelectItem value="5:00 PM">5:00 PM</SelectItem>
-                                                        <SelectItem value="5:30 PM">5:30 PM</SelectItem>
-                                                        <SelectItem value="6:00 PM">6:00 PM</SelectItem>
-                                                        <SelectItem value="6:30 PM">6:30 PM</SelectItem>
-                                                        <SelectItem value="7:00 PM">7:00 PM</SelectItem>
-                                                        <SelectItem value="7:30 PM">7:30 PM</SelectItem>
-                                                        <SelectItem value="8:00 PM">8:00 PM</SelectItem>
-                                                        <SelectItem value="8:30 PM">8:30 PM</SelectItem>
-                                                        <SelectItem value="9:00 PM">9:00 PM</SelectItem>
-                                                        <SelectItem value="9:30 PM">9:30 PM</SelectItem>
-                                                        <SelectItem value="10:00 PM">10:00 PM</SelectItem>
-                                                        <SelectItem value="10:30 PM">10:30 PM</SelectItem>
-                                                        <SelectItem value="11:00 PM">11:00 PM</SelectItem>
-                                                        <SelectItem value="11:30 PM">11:30 PM</SelectItem>
+                                                        {TIME_OF_DAY_INCREMENTS.map((time) => (
+                                                            <SelectItem key={time} value={time}>
+                                                                {time}
+                                                            </SelectItem>
+                                                        ))}
                                                     </ScrollArea>
                                                 </SelectContent>
                                             </Select>
@@ -274,54 +249,11 @@ export default function EnterHours() {
                                                 </FormControl>
                                                 <SelectContent>
                                                     <ScrollArea className="h-[300px]">
-                                                        <SelectItem value="12:00 AM">12:00 AM</SelectItem>
-                                                        <SelectItem value="12:30 AM">12:30 AM</SelectItem>
-                                                        <SelectItem value="1:00 AM">1:00 AM</SelectItem>
-                                                        <SelectItem value="1:30 AM">1:30 AM</SelectItem>
-                                                        <SelectItem value="2:00 AM">2:00 AM</SelectItem>
-                                                        <SelectItem value="2:30 AM">2:30 AM</SelectItem>
-                                                        <SelectItem value="3:00 AM">3:00 AM</SelectItem>
-                                                        <SelectItem value="3:30 AM">3:30 AM</SelectItem>
-                                                        <SelectItem value="4:00 AM">4:00 AM</SelectItem>
-                                                        <SelectItem value="4:30 AM">4:30 AM</SelectItem>
-                                                        <SelectItem value="5:00 AM">5:00 AM</SelectItem>
-                                                        <SelectItem value="5:30 AM">5:30 AM</SelectItem>
-                                                        <SelectItem value="6:00 AM">6:00 AM</SelectItem>
-                                                        <SelectItem value="6:30 AM">6:30 AM</SelectItem>
-                                                        <SelectItem value="7:00 AM">7:00 AM</SelectItem>
-                                                        <SelectItem value="7:30 AM">7:30 AM</SelectItem>
-                                                        <SelectItem value="8:00 AM">8:00 AM</SelectItem>
-                                                        <SelectItem value="8:30 AM">8:30 AM</SelectItem>
-                                                        <SelectItem value="9:00 AM">9:00 AM</SelectItem>
-                                                        <SelectItem value="9:30 AM">9:30 AM</SelectItem>
-                                                        <SelectItem value="10:00 AM">10:00 AM</SelectItem>
-                                                        <SelectItem value="10:30 AM">10:30 AM</SelectItem>
-                                                        <SelectItem value="11:00 AM">11:00 AM</SelectItem>
-                                                        <SelectItem value="11:30 AM">11:30 AM</SelectItem>
-                                                        <SelectItem value="12:00 PM">12:00 PM</SelectItem>
-                                                        <SelectItem value="12:30 PM">12:30 PM</SelectItem>
-                                                        <SelectItem value="1:00 PM">1:00 PM</SelectItem>
-                                                        <SelectItem value="1:30 PM">1:30 PM</SelectItem>
-                                                        <SelectItem value="2:00 PM">2:00 PM</SelectItem>
-                                                        <SelectItem value="2:30 PM">2:30 PM</SelectItem>
-                                                        <SelectItem value="3:00 PM">3:00 PM</SelectItem>
-                                                        <SelectItem value="3:30 PM">3:30 PM</SelectItem>
-                                                        <SelectItem value="4:00 PM">4:00 PM</SelectItem>
-                                                        <SelectItem value="4:30 PM">4:30 PM</SelectItem>
-                                                        <SelectItem value="5:00 PM">5:00 PM</SelectItem>
-                                                        <SelectItem value="5:30 PM">5:30 PM</SelectItem>
-                                                        <SelectItem value="6:00 PM">6:00 PM</SelectItem>
-                                                        <SelectItem value="6:30 PM">6:30 PM</SelectItem>
-                                                        <SelectItem value="7:00 PM">7:00 PM</SelectItem>
-                                                        <SelectItem value="7:30 PM">7:30 PM</SelectItem>
-                                                        <SelectItem value="8:00 PM">8:00 PM</SelectItem>
-                                                        <SelectItem value="8:30 PM">8:30 PM</SelectItem>
-                                                        <SelectItem value="9:00 PM">9:00 PM</SelectItem>
-                                                        <SelectItem value="9:30 PM">9:30 PM</SelectItem>
-                                                        <SelectItem value="10:00 PM">10:00 PM</SelectItem>
-                                                        <SelectItem value="10:30 PM">10:30 PM</SelectItem>
-                                                        <SelectItem value="11:00 PM">11:00 PM</SelectItem>
-                                                        <SelectItem value="11:30 PM">11:30 PM</SelectItem>
+                                                        {TIME_OF_DAY_INCREMENTS.map((time) => (
+                                                            <SelectItem key={time} value={time}>
+                                                                {time}
+                                                            </SelectItem>
+                                                        ))}
                                                     </ScrollArea>
                                                 </SelectContent>
                                             </Select>
@@ -330,6 +262,11 @@ export default function EnterHours() {
                                     </FormItem>
                                 )}
                             />
+                            {submissionError && (
+                                <p className="col-span-full text-sm font-medium text-destructive">
+                                    {submissionError}
+                                </p>
+                            )}
                             <Button type="submit" className="col-span-full mt-4">
                                 Add Work Day
                             </Button>
