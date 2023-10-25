@@ -1,4 +1,4 @@
-import { EnterHours } from "../components/enter-hours";
+import { EnterHours } from "../interfaces/EnterHours";
 import { Ruleset } from "../interfaces/Ruleset";
 
 export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { isValid: boolean, errorMessage?: string } {
@@ -29,11 +29,11 @@ export function validateNewRuleset(newRuleset: Ruleset, rulesets: Ruleset[]): { 
 
 export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHours[]): { isValid: boolean, errorMessage?: string } {
 
-  if (newHoursWorked.startTime == newHoursWorked.endTime) {
+  if (getTimeValue(newHoursWorked.startTime) == getTimeValue(newHoursWorked.endTime)) {
     return { isValid: false, errorMessage: 'Start time and end time cannot be the same.' };
   }
 
-  if (newHoursWorked.startTime > newHoursWorked.endTime) {
+  if (getTimeValue(newHoursWorked.startTime) < getTimeValue(newHoursWorked.endTime)) {
     return { isValid: false, errorMessage: 'End time cannot be before start time.' };
   }
 
@@ -61,6 +61,12 @@ export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHour
 
   return { isValid: true };
 
+}
+
+// Function to convert time value to a comparable format (e.g., "HH:mm" to minutes)
+function getTimeValue(time: string) {
+  const [hours, minutes] = time.split(':');
+  return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
 }
 
 export function calculateHours(startTime: string, endTime: string): number {

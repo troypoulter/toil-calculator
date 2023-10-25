@@ -9,10 +9,17 @@ import {
 } from "@/components/ui/card"
 
 import Rulesets from "./components/rulesets"
-import EnterHours from "./components/enter-hours"
+import EnterHoursWorked from "./components/enter-hours"
+import CalculateTime from "./components/calculate-time"
+import { EnterHours } from "./interfaces/EnterHours"
+import { Ruleset } from "./interfaces/Ruleset"
+import { useState } from "react"
 import TypeIt from "typeit-react"
 
 export default function IndexPage() {
+  const [rulesets, setRulesets] = useState<Ruleset[]>([]);
+  const [hoursWorked, setHoursWorked] = useState<EnterHours[]>([]);
+
   return (
     <section className="container grid items-center gap-6 py-6 md:pt-10">
       <div className="flex flex-col items-start gap-2">
@@ -38,7 +45,7 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Rulesets />
+          <Rulesets rulesets={rulesets} setRulesets={setRulesets}/>
         </CardContent>
       </Card>
       <Card className="shadow-md">
@@ -49,7 +56,7 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <EnterHours />
+          <EnterHoursWorked hoursWorked={hoursWorked} setHoursWorked={setHoursWorked}/>
         </CardContent>
       </Card>
       <Card className="shadow-md">
@@ -61,9 +68,9 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-lg font-semibold">Your total TOIL: 10 hours</div>
+          <CalculateTime rulesets={rulesets} hoursWorked={hoursWorked} />
           <p className="leading-7 [&:not(:first-child)]:mt-6">
-            Here&apos;s the math:
+            Here&apos;s the math: TODO
           </p>
         </CardContent>
       </Card>
