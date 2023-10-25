@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Ruleset } from "../interfaces/Ruleset";
 import { EnterHours } from "../interfaces/EnterHours";
-import { calculateHours } from '../utils/utils';
+import { calculateHours, getTimeValue } from '../utils/utils';
 
 interface CalculateTimeProps {
   rulesets: Ruleset[];
@@ -15,8 +15,8 @@ export function calculateTotalTOIL(rulesets: Ruleset[], hoursWorked: EnterHours[
     const matchingRuleset = rulesets.find((ruleset) =>
       // Compare ruleset dayOfWeek and startTime with hours date and startTime
       ruleset.dayOfWeek === hoursDayOfWeek &&
-      ruleset.startTime <= hours.startTime &&
-      ruleset.endTime >= hours.endTime
+      getTimeValue(ruleset.startTime) <= getTimeValue(hours.startTime) &&
+      getTimeValue(ruleset.endTime) >= getTimeValue(hours.endTime)
     );
 
     if (matchingRuleset) {

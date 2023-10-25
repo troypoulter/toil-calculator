@@ -33,7 +33,7 @@ export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHour
     return { isValid: false, errorMessage: 'Start time and end time cannot be the same.' };
   }
 
-  if (getTimeValue(newHoursWorked.startTime) < getTimeValue(newHoursWorked.endTime)) {
+  if (getTimeValue(newHoursWorked.startTime) > getTimeValue(newHoursWorked.endTime)) {
     return { isValid: false, errorMessage: 'End time cannot be before start time.' };
   }
 
@@ -58,15 +58,21 @@ export function validateHours(newHoursWorked: EnterHours, hoursWorked: EnterHour
   if (exactMatch) {
     return { isValid: false, errorMessage: 'The inputted hours exactly match hours you have already added.' };
   }
-
   return { isValid: true };
-
 }
 
-// Function to convert time value to a comparable format (e.g., "HH:mm" to minutes)
-function getTimeValue(time: string) {
-  const [hours, minutes] = time.split(':');
-  return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+// Function to convert time value to 24 hour time format
+export function getTimeValue(time: string): number {
+  const [timeWithoutAmPm, amPm] = time.split(' ');
+
+  let [hours, minutes] = timeWithoutAmPm.split(':').map(Number);
+  if (amPm === 'PM' && hours !== 12) {
+    hours += 12;
+  } else if (amPm === 'AM' && hours === 12) {
+    hours = 0;
+  }
+
+  return hours * 60 + minutes;
 }
 
 export function calculateHours(startTime: string, endTime: string): number {
