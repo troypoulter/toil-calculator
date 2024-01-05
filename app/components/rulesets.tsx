@@ -48,8 +48,11 @@ const DevT: React.ElementType = dynamic(
   { ssr: false }
 )
 
-export default function Rulesets() {
-  const [rulesets, setRulesets] = useState<Ruleset[]>([])
+interface RulesetsProps {
+  rulesets: Ruleset[];
+  setRulesets: React.Dispatch<React.SetStateAction<Ruleset[]>>;
+}
+export default function Rulesets({rulesets, setRulesets}: RulesetsProps) {
   const [submissionError, setSubmissionError] = useState<string | null>(null)
   const [isSampleDataAdded, setIsSampleDataAdded] = useState(false)
 
@@ -62,7 +65,7 @@ export default function Rulesets() {
       dayOfWeek: "",
       startTime: "",
       endTime: "",
-      multipler: 1,
+      multiplier: 1,
     },
   })
 
@@ -105,19 +108,19 @@ export default function Rulesets() {
             <TableHead>Applicable Day</TableHead>
             <TableHead>Start Time</TableHead>
             <TableHead>End Time</TableHead>
-            <TableHead>Multipler</TableHead>
+            <TableHead>multiplier</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {rulesets.map((ruleset) => (
             <TableRow
-              key={`${ruleset.name}-${ruleset.dayOfWeek}-${ruleset.multipler}`}
+              key={`${ruleset.name}-${ruleset.dayOfWeek}-${ruleset.multiplier}`}
             >
               <TableCell>{ruleset.name}</TableCell>
               <TableCell>{ruleset.dayOfWeek}</TableCell>
               <TableCell>{ruleset.startTime}</TableCell>
               <TableCell>{ruleset.endTime}</TableCell>
-              <TableCell>{ruleset.multipler}</TableCell>
+              <TableCell>{ruleset.multiplier}</TableCell>
             </TableRow>
           ))}
           {rulesets.length === 0 && (
@@ -276,7 +279,7 @@ export default function Rulesets() {
               />
               <FormField
                 control={form.control}
-                name="multipler"
+                name="multiplier"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Multiplier</FormLabel>

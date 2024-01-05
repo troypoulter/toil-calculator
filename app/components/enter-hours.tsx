@@ -34,44 +34,22 @@ import { CalendarDays } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { validateHours } from "../utils/utils"
 import { TIME_OF_DAY_INCREMENTS } from "../utils/constants"
+import { EnterHours, EnterHoursSchema } from "../interfaces/EnterHours"
 
 
-const enterHoursSchema = z.object({
-    date: z
-        .date({
-            required_error: "A date is required.",
-        }),
-    startTime: z
-        .string({
-            required_error: "We need to know when you started work to calculate your TOIL",
-        })
-        .regex(
-            /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
-            "Start time must be in the format of HH:MM AM/PM"
-        ),
-    endTime: z
-        .string({
-            required_error: "We need to know when you ended work to calculate your TOIL",
-        })
-        .regex(
-            /^([1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/,
-            "End time must be in the format of HH:MM AM/PM"
-        )
-})
-
-export type EnterHours = z.infer<typeof enterHoursSchema>
-
-export default function EnterHours() {
-
-    const [hoursWorked, setHoursWorked] = useState<EnterHours[]>([])
+interface EnterHoursProps {
+    hoursWorked: EnterHours[];
+    setHoursWorked: React.Dispatch<React.SetStateAction<EnterHours[]>>;
+  }
+export default function EnterHoursWorked({hoursWorked, setHoursWorked}: EnterHoursProps) {
     const [submissionError, setSubmissionError] = useState<string | null>(null)
 
     function removeHoursWorked() {
         setHoursWorked([])
     }
 
-    const form = useForm<z.infer<typeof enterHoursSchema>>({
-        resolver: zodResolver(enterHoursSchema),
+    const form = useForm<EnterHours>({
+        resolver: zodResolver(EnterHoursSchema),
         defaultValues: {
             date: undefined,
             startTime: "",

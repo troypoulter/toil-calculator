@@ -51,7 +51,7 @@ const baseRulesetSchema = z.object({
   .refine((value) => DAYS_OF_WEEK.includes(value), {
     message: "Day of the week must be a valid day.",
     }),
-  multipler: z
+  multiplier: z
   .union([z.number(), z.string()])
   .transform((value) => (typeof value === "string" ? Number(value) : value))
 })
