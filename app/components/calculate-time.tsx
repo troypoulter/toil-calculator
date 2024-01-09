@@ -63,8 +63,8 @@ function calculateHoursFromValues(startValue: number, endValue: number): number 
   return overlappingHours;
 }
 
-const CalculateTime: React.FC<CalculateTimeProps> = ({ rulesets, hoursWorked }) => {
-  const totalTOIL = calculateTotalTOIL(rulesets, hoursWorked);
+const CalculateTime: React.FC<CalculateTimeProps> = ({ rulesets, hoursWorked, setTotalTOILHours }) => {
+  const totalTOIL = calculateTotalTOIL(rulesets, hoursWorked, setTotalTOILHours);
 
   return (
     <div>
