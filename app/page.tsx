@@ -11,6 +11,7 @@ import {
 import Rulesets from "./components/rulesets"
 import EnterHoursWorked from "./components/enter-hours"
 import CalculateTime from "./components/calculate-time"
+import CalculateLeave from "./components/calculate-leave"
 import { EnterHours } from "./interfaces/EnterHours"
 import { Ruleset } from "./interfaces/Ruleset"
 import { useState } from "react"
@@ -19,6 +20,7 @@ import TypeIt from "typeit-react"
 export default function IndexPage() {
   const [rulesets, setRulesets] = useState<Ruleset[]>([]);
   const [hoursWorked, setHoursWorked] = useState<EnterHours[]>([]);
+  const [totalTOILHours, setTotalTOILHours] = useState(0);
 
   return (
     <section className="container grid items-center gap-6 py-6 md:pt-10">
@@ -68,10 +70,12 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <CalculateTime rulesets={rulesets} hoursWorked={hoursWorked} />
-          <p className="leading-7 [&:not(:first-child)]:mt-6">
-            Here&apos;s the math: TODO
-          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>          
+              <CalculateTime rulesets={rulesets} hoursWorked={hoursWorked} setTotalTOILHours={setTotalTOILHours} />
+            </div>
+            <div><CalculateLeave totalToilHours={totalTOILHours} /></div>
+          </div>
         </CardContent>
       </Card>
     </section >
