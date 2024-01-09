@@ -3,7 +3,7 @@ interface CalculateLeaveProps {
   }
 
   const CalculateLeave: React.FC<CalculateLeaveProps> = ({ totalToilHours }) => {
-    const totalLeave = totalToilHours / 7.6;
+    const totalLeave = parseFloat((totalToilHours / 7.6).toFixed(2));
     let funComment;
 
     if (totalLeave > 0) {
