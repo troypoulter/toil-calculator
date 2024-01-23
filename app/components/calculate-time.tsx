@@ -6,9 +6,11 @@ import { getTimeValue } from '../utils/utils';
 interface CalculateTimeProps {
   rulesets: Ruleset[];
   hoursWorked: EnterHours[];
+  setTotalTOILHours: React.Dispatch<React.SetStateAction<number>>;
+
 }
 
-export function calculateTotalTOIL(rulesets: Ruleset[], hoursWorked: EnterHours[]): number {
+export function calculateTotalTOIL(rulesets: Ruleset[], hoursWorked: EnterHours[], setTotalTOILHours: ((arg0: any) => void)): number {
   let totalTOIL = 0;
   hoursWorked.forEach((hours) => {
     const hoursDayOfWeek = hours.date.toLocaleString('en-US', { weekday: 'long' });
@@ -40,7 +42,11 @@ export function calculateTotalTOIL(rulesets: Ruleset[], hoursWorked: EnterHours[
       totalTOIL += overlappingHours * matchingRuleset.multiplier;
     }});
 
-  return totalTOIL;
+    if (totalTOIL) {
+      setTotalTOILHours(totalTOIL);
+    };
+
+    return totalTOIL;
 }
 
 // New function to calculate hours from raw time values
@@ -57,8 +63,8 @@ function calculateHoursFromValues(startValue: number, endValue: number): number 
   return overlappingHours;
 }
 
-const CalculateTime: React.FC<CalculateTimeProps> = ({ rulesets, hoursWorked }) => {
-  const totalTOIL = calculateTotalTOIL(rulesets, hoursWorked);
+const CalculateTime: React.FC<CalculateTimeProps> = ({ rulesets, hoursWorked, setTotalTOILHours }) => {
+  const totalTOIL = calculateTotalTOIL(rulesets, hoursWorked, setTotalTOILHours);
 
   return (
     <div>
